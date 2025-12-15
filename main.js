@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         中燃WMS二维码生成器
 // @namespace    https://wms.chinagasholdings.com
-// @version      1.0
+// @version      2.0
 // @description  获取页面信息并生成可拖拽的悬浮二维码
 // @author       intpfx
 // @match        https://wms.chinagasholdings.com/logincenter/wms_workplace

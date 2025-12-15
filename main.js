@@ -41,7 +41,7 @@
       const link = document.createElement('link');
       link.rel = 'stylesheet';
       link.href = 'https://esm.sh/font-awesome@4.7.0/css/font-awesome.min.css';
-      
+
       // 返回Promise等待加载完成
       return new Promise((resolve, reject) => {
         link.onload = () => {
@@ -63,7 +63,7 @@
   // 导入QRCode库
   async function importQRCode() {
     if (qrcodeLib) return qrcodeLib;
-    
+
     try {
       const { qrcode } = await import('https://esm.sh/jsr/@libs/qrcode');
       qrcodeLib = qrcode;
@@ -117,12 +117,12 @@
                 flex-direction: column;
                 align-items: center;
             }
-            
+
             #qrcode-floating-window:hover {
                 box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
                 border-color: #2980b9;
             }
-            
+
             #qrcode-header {
                 width: 100%;
                 display: flex;
@@ -130,7 +130,7 @@
                 gap: 8px;
                 margin-bottom: 10px;
             }
-            
+
             .qrcode-btn {
                 background: #f1f5f9;
                 color: #3498db;
@@ -145,12 +145,12 @@
                 justify-content: center;
                 transition: all 0.2s;
             }
-            
+
             .qrcode-btn:hover {
                 background: #3498db;
                 color: white;
             }
-            
+
             #qrcode-container {
                 display: flex;
                 justify-content: center;
@@ -158,7 +158,7 @@
                 width: 200px;
                 height: 200px;
             }
-            
+
             #qrcode-info {
                 font-size: 14px;
                 color: #333;
@@ -168,7 +168,7 @@
                 overflow-y: auto;
                 width: 100%;
             }
-            
+
             .qrcode-notification {
                 position: fixed;
                 bottom: 20px;
@@ -180,30 +180,30 @@
                 transition: opacity 0.3s;
                 box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
             }
-            
+
             .qrcode-notification.info {
                 background: #3498db;
             }
-            
+
             .qrcode-notification.success {
                 background: #2ecc71;
             }
-            
+
             .qrcode-notification.error {
                 background: #e74c3c;
             }
-            
+
             /* 最小化样式 */
             #qrcode-floating-window.minimized {
                 min-width: auto;
                 padding: 8px;
             }
-            
+
             #qrcode-floating-window.minimized #qrcode-container,
             #qrcode-floating-window.minimized #qrcode-info {
                 display: none;
             }
-            
+
             .error-message {
                 color: #e74c3c;
                 text-align: center;
@@ -217,13 +217,13 @@
   // 获取页面信息
   function getPageInfo() {
     try {
-      // 找到页面中id为A3001detailFormMain的表单
-      const form = document.querySelector('#A3001detailFormMain');
-      
+      // 找到页面中id为A3001S05_ALLOCheaderMainForm的表单
+      const form = document.querySelector('#A3001S05_ALLOCheaderMainForm');
+
       if (!form) {
-        throw new Error('未找到表单元素A3001detailFormMain');
+        throw new Error('未找到表单元素A3001S05_ALLOCheaderMainForm');
       }
-      
+
       // 封装获取输入值的函数，增加错误处理
       const getInputValue = (name, alias) => {
         const input = form.querySelector(`input[name="${name}"]`);
@@ -233,7 +233,7 @@
         }
         return input.value || `无${alias}信息`;
       };
-      
+
       return {
         supplierName: getInputValue('lotAtt04','供应商名称'),
         sku: getInputValue('sku','物料编码'),
@@ -255,7 +255,7 @@
 
   // 生成二维码内容
   function generateQRContent(pageInfo) {
-    return `供应商名称: ${pageInfo.supplierName}\n物料编码: ${pageInfo.sku}\n生产日期: ${pageInfo.dop}\n生产批次: ${pageInfo.batch}`;
+    return `供应商名称：${pageInfo.supplierName}\n物料编码：${pageInfo.sku}\n生产日期：${pageInfo.dop}\n生产批次：${pageInfo.batch}`;
   }
 
   // 创建悬浮窗
@@ -342,7 +342,7 @@
     if (!qrcodeLib) {
       qrcodeLib = await importQRCode();
     }
-    
+
     const pageInfo = getPageInfo();
     const qrContent = generateQRContent(pageInfo);
 
@@ -362,14 +362,14 @@
     if (!qrcodeContainer) {
       throw new Error('二维码容器不存在');
     }
-    
+
     // 清除现有内容
     qrcodeContainer.innerHTML = '';
-    
+
     try {
       // 生成SVG格式的二维码
       let svg = qrcodeLib(qrContent, { output: "svg" });
-      
+
       // 验证SVG内容是否有效
       if (typeof svg !== 'string' || svg.trim() === '') {
         throw new Error("生成的SVG内容为空或无效");
@@ -377,14 +377,14 @@
 
       // 将svg字符串里的viewBox更改为"0 0 52 52"
       svg = svg.replace(/viewBox="0 0 \d+ \d+"/, 'viewBox="0 0 52 52"');
-      
+
       // 创建临时容器解析SVG
       const tempContainer = document.createElement('div');
       tempContainer.innerHTML = svg;
-      
+
       // 尝试获取SVG元素
       let svgElement = tempContainer.querySelector('svg');
-      
+
       // 如果直接解析失败，尝试使用DOMParser
       if (!svgElement) {
         const parser = new DOMParser();
@@ -401,12 +401,12 @@
           throw new Error("无法解析SVG内容");
         }
       }
-      
+
       if (svgElement && svgElement.tagName.toLowerCase() === 'svg') {
         // 清除可能的事件监听器和不需要的属性
         svgElement.removeAttribute('onload');
         svgElement.removeAttribute('onerror');
-        
+
         // 添加到容器
         qrcodeContainer.appendChild(svgElement);
       } else {
@@ -518,7 +518,7 @@
     // 触摸设备支持
     element.addEventListener('touchstart', (e) => {
       if (e.touches.length !== 1) return;
-      
+
       const touch = e.touches[0];
       // 只有点击非按钮区域才允许拖拽
       if (e.target.closest('.qrcode-btn')) {
@@ -623,7 +623,7 @@
     try {
       // 先加载字体图标
       await loadFontAwesome();
-      
+
       // 导入二维码库
       await importQRCode();
 
